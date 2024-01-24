@@ -9,7 +9,9 @@ import syllabusRouter from './routes/syllabus.routes.js'
 
 import cors from 'cors'
 const server = express();
-server.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+server.use(cors());
+
+//{ origin: 'http://localhost:5173', credentials: true }
 
 dotenv.config();
 server.use(express.json());
