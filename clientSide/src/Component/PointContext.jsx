@@ -9,7 +9,7 @@ export const PointProvider = ({ children }) => {
     const fetchPoints = async () => {
       if(localStorage.getItem('token')){
           try {
-          const response = await fetch("http://localhost:3001/api/user/point", {
+          const response = await fetch("https://codingname.onrender.com/api/user/point", {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export const PointProvider = ({ children }) => {
 
   const updatePoints = async (newPoints) => {
     try {
-      const response = await fetch("http://localhost:3001/api/user/point", {
+      const response = await fetch("https://codingname.onrender.com/api/user/point", {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

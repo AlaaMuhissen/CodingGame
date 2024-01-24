@@ -18,7 +18,7 @@ const RegistrationPage = () => {
         password : password,
         role : role,
       }
-      fetch("http://localhost:3001/api/user/register", {
+      fetch("https://codingname.onrender.com/api/user/register", {
         method : "POST",
         headers: {
             'Content-Type': 'application/json'

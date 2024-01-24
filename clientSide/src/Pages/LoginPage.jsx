@@ -26,7 +26,7 @@ function LoginPage() {
       password: userPassword
     };
 
-    fetch('http://localhost:3001/api/user/login', {
+    fetch('https://codingname.onrender.com/api/user/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

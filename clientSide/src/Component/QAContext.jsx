@@ -6,7 +6,7 @@ export const QAProvider = ({children})=>{
   const [qa,setQa] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/syllabus/main")
+    fetch("https://codingname.onrender.com/api/syllabus/main")
       .then(res => res.json())
       .then(data => {
         setSyllabus(data);

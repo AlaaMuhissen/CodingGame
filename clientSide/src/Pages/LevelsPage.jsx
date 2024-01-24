@@ -16,7 +16,7 @@ function LevelsPage() {
 
 
   useEffect(()=> {
-     fetch(`http://localhost:3001/api/question/${language}/${topic}`,  {headers: {
+     fetch(`https://codingname.onrender.com/api/question/${language}/${topic}`,  {headers: {
         'Content-Type': 'application/json'
       }
     }).then(response => response.json()).then(data => setLevel(data)).catch(error => {

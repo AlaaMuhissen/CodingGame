@@ -14,7 +14,7 @@ function HTMLPage() {
     const progress = JSON.parse(localStorage.getItem('progress'))
     
     // useEffect(() => {
-    //   fetch("http://localhost:3001/api/user/progress", {
+    //   fetch("https://codingname.onrender.com/api/user/progress", {
     //     method: "PUT",
     //     headers: {
     //       'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ function HTMLPage() {
     useEffect (() =>{
       if(levelNum <= 2){
         console.log("...fetching"); 
-          fetch(`http://localhost:3001/api/question/${language}/${topic}/${parseInt(levelNum)}`).then(res => res.json()).then(data => setQuestionArr(data.questions)).catch((err)=>{
+          fetch(`https://codingname.onrender.com/api/question/${language}/${topic}/${parseInt(levelNum)}`).then(res => res.json()).then(data => setQuestionArr(data.questions)).catch((err)=>{
             navigate(`/dashboard/`)
           });
       }
