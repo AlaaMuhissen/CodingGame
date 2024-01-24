@@ -1,0 +1,43 @@
+import React, { useEffect } from 'react';
+import { AiOutlineLogout } from 'react-icons/ai';
+import { usePoints } from './PointContext';
+import { useNavigate } from 'react-router-dom';
+import { GiCash } from "react-icons/gi";
+import CountUp from 'react-countup';
+
+const Header = ({ name, title }) => {
+  const { points, updatePoints } = usePoints();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const storedPoints = localStorage.getItem('points');
+    if (storedPoints !== null) {
+      updatePoints(parseInt(storedPoints, 10));
+    }
+    <CountUp end={points} duration={10} />
+
+  }, [updatePoints]);
+  const logOut = () => {
+    localStorage.clear();
+    navigate('/')
+  };
+
+  return (
+    <header className='xl:mb-96 md:mb-16 flex flex-col md:flex-row justify-between items-center'>
+    <div className='mb-3 md:mb-0 md:flex md:flex-col'>
+      <h3 className='text-2xl md:text-4xl text-[#FF4CB7] font-bold mb-1 md:mb-3' style={{fontFamily :'cursive'}}>
+        Hi Again {name}
+      </h3>
+      <p className='text-lg md:text-xl text-[#4E75FF] font-bold' style={{fontFamily :'cursive'}}>{title}</p>
+    </div>
+  
+    <p className='text-lg md:text-2xl text-[#FFD700] font-bold ' style={{fontFamily :'cursive'}}><GiCash /> {points}</p>
+  
+    <button onClick={logOut} className='md:ml-4'>
+      <AiOutlineLogout color='#4E75FF' size={'2rem'} />
+    </button>
+  </header>
+  
+  );
+};
+
+export default Header;

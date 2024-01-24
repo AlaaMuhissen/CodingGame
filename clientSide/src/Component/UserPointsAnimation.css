@@ -1,0 +1,22 @@
+/* UserPointsAnimation.css */
+.user-points-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+  }
+  
+  .user-point {
+    position: absolute;
+    background-color: #3498db;
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  button {
+    margin-top: 10px;
+  }
+  
