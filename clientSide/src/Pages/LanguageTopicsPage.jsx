@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { useSyllabus } from '../Component/SyllabusContext';
 import TopicCard from '../Component/CreateCard/TopicCard';
 import Header from '../Component/Header';
@@ -11,6 +11,9 @@ function LanguageTopicsPage() {
     const language = useParams()["language_Topics"].split("_")[0];
     const syllabus = useSyllabus();
     const languageTopics = syllabus.syllabusContent?.find(lan => lan.lanName == language)
+
+
+   
     
   return (
      <>
@@ -20,17 +23,18 @@ function LanguageTopicsPage() {
           title={"Let's add a new item together!"} />
 
           <HtmlTitle title={"Pick a Tale, Sparkle and Sail "}/>
-     <div className='flex flex-wrap gap-4'>
-       {
-        languageTopics?.topics?.map((topic, i) =>(
-        <TopicCard 
-        title= {topic}
-        language = {language}
-        key= {i}/>
-        )
-        )
-      }
-      </div>
+          <div className='flex flex-wrap gap-4 sm:flex-col md:flex-row lg:flex-row xl:flex-row max-w-screen-lg'>
+  {
+    languageTopics?.topics?.map((topicc, i) => (
+      <TopicCard 
+        title={topicc}
+        language={language}
+        key={i}
+      />
+    ))
+  }
+</div>
+
       </div>
      </>
   )

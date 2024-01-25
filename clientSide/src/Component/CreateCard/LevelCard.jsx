@@ -25,10 +25,10 @@ function LevelCard({language,topic,levelNumber,questionNum ,questions}) {
   return (
     <>
   <div
-    className={`w-full md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-48 mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 p-6 md:p-10 h-full max-h-40 mb-5 cursor-pointer ${levelStatus ? 'opacity-50' : 'opacity-100'}`}
+    className={`w-full md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-48 mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 h-full max-h-40 mb-5 cursor-pointer ${levelStatus ? 'opacity-50' : 'opacity-100'}`}
     onClick={handleClick}
   >
-    <div className="mt-4 md:mt-6">
+    <div className="mt-2 md:mt-4">
       <h2 className='font-bold text-lg md:text-xl mb-2 text-[#4E75FF] mx-auto text-center' style={{fontFamily :'cursive'}}>
         Level {levelNumber}
       </h2>

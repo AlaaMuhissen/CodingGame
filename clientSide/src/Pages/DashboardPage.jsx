@@ -12,7 +12,7 @@ function DashboardPage() {
   
   return (
      <>
-     <div className='p-4 md:p-8 lg:p-12 xl:p-16'>
+     <div className='p-4 md:p-8 lg:p-12 xl:p-14'>
        <Header
           name ={"Alaa"}
           title = {"How do you wanna spice up your brain today?"} />

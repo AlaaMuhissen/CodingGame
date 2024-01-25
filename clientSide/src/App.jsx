@@ -29,6 +29,7 @@ function App() {
       <SyllabusProvider>
         <Routes>
           <Route path='/' element={<LoginPage />} />
+          <Route path='/signUp' element={<RegistrationPage />} />
            <Route element={<PointProviderLayout />}>
             <Route path='/dashboard' element={<DashboardPage />} />
             <Route path='/dashboard/:language_Topics' element={<LanguageTopicsPage />} />

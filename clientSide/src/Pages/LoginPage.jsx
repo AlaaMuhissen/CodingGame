@@ -68,6 +68,10 @@ function LoginPage() {
         console.error('Error during login:', error);
       });
   };
+
+  const handleClickSignUP = ()=>{
+    navigate(`/signUp`);
+  }
   
   return (
    <>
@@ -100,7 +104,8 @@ function LoginPage() {
             </div>
 
             <div className="mb-6">
-              <label className="flex items-center">
+            <span className="ml-2 text-sm text-[#fff]" onClick={handleClickSignUP}>You still not have an account?</span>
+              {/* <label className="flex items-center">
                 <input
                   type="checkbox"
                   className="form-checkbox text-blue-500"
@@ -108,7 +113,7 @@ function LoginPage() {
                   onChange={() => setIsTeacher((isTeacher) => !isTeacher)}
                 />
                 <span className="ml-2 text-sm text-[#fff]">Is Teacher</span>
-              </label>
+              </label> */}
             </div>
             <div className="mt-8 flex justify-center text-lg text-black">
               <button

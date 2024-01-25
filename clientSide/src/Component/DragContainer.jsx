@@ -34,20 +34,21 @@ export default function DragContainer({ availableBlocks, boardId, level, setUser
               const updatedUserAnswer = prevBlocks.filter(ans => ans.boardId !== blocks.boardId);
               return [...updatedUserAnswer, blocks];
           });
-          // // console.log(answerBlockNum);
-          // console.log(`c is ${c}`);
-          // console.log(`answerBlockNum is ${answerBlockNum}`);
-          // console.log(`level is ${level}`);
+         
        
           if ((parseInt(level) === 1) && (c >= answerBlockNum)) {
               const is = userAnswer.filter(ans => ans.id !== ans.boardId);
+              if((userAnswer.length !== answerBlockNum) &&( is.length === 0)){
+                setBlocks({...board});
+              }
+            else{
               (is.length === 0) && onCorrectAnswer();
+            }
+            
           }
       }
   }, [blocks]);
 
-  
-  
     const addImageToBoard = (id) => {
         const pictureList = availableBlocks.find((picture) => id === picture.id);
         setBoard([pictureList]);

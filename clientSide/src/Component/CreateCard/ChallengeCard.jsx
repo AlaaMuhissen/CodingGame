@@ -23,10 +23,10 @@ function ChallengeCard({questionNum}) {
     <>
   <>
   <div
-    className={`w-full md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-48 mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 p-6 md:p-10 h-full max-h-40 mb-5 cursor-pointer ${status ? 'opacity-50' : 'opacity-100'}`}
+    className={`w-full md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-48 mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 p-3 md:p-5 h-full max-h-40 mb-5 cursor-pointer ${status ? 'opacity-50' : 'opacity-100'}`}
     onClick={handleClick}
   >
-    <div className="mt-4 md:mt-6">
+    <div className="mt-4 md:mt-3 flex justify-center items-center">
       <div className="font-bold text-lg md:text-xl mb-2 text-[#4E75FF] mx-auto text-center" style={{fontFamily :'cursive'}}>
         Challenge {questionNum}
       </div>

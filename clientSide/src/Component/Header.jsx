@@ -20,10 +20,12 @@ const Header = ({ name, title }) => {
     localStorage.clear();
     navigate('/')
   };
-
+   const handleClickRoute = ()=>{
+    navigate('/dashboard')
+   }
   return (
-    <header className='xl:mb-96 md:mb-16 flex flex-col md:flex-row justify-between items-center'>
-    <div className='mb-3 md:mb-0 md:flex md:flex-col'>
+    <header className='xl:mb-18 md:mb-16 flex flex-col md:flex-row justify-between items-center'>
+    <div className='mb-3 md:mb-0 md:flex md:flex-col' onClick={handleClickRoute}>
       <h3 className='text-2xl md:text-4xl text-[#FF4CB7] font-bold mb-1 md:mb-3' style={{fontFamily :'cursive'}}>
         Hi Again {name}
       </h3>

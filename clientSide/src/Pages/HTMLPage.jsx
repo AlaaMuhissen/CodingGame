@@ -13,21 +13,21 @@ function HTMLPage() {
     const language = language_Topics.split("_")[0];
     const progress = JSON.parse(localStorage.getItem('progress'))
     
-    // useEffect(() => {
-    //   fetch("https://codingname.onrender.com/api/user/progress", {
-    //     method: "PUT",
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //     },
-    //     body: JSON.stringify({ progress: progress }),
-    //   })
-    //     .then((res) => res.json())
-    //     .then((data) => console.log(data))
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // }, [progress]);
+    useEffect(() => {
+      fetch("https://codingname.onrender.com/api/user/progress", {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ progress: progress }),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((err) => {
+          console.log(err);
+        });
+    }, [progress]);
     
  
 
@@ -39,7 +39,9 @@ function HTMLPage() {
           });
       }
       else{
-        navigate(`/dashboard/`)
+        navigate(`/dashboard/${language}_Topics`, {
+            state : topic
+        })
       }
     },[])
  

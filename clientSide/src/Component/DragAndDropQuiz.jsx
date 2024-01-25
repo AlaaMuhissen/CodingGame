@@ -10,9 +10,9 @@ import CodeBlock from './CodeBlock';
 import { usePoints } from './PointContext';
 import Header from './Header';
 import useSound from 'use-sound';
-import coinsSound from '../../public/sounds/cash-register-fake-88639.mp3'
-import ohNoSound from '../../public/sounds/oh-no-113125.mp3'
-import wahSound from '../../public/sounds/wah-wah-sad-trombone-6347.mp3'
+import coinsSound from '/sounds/cash-register-fake-88639.mp3'
+import ohNoSound from '/sounds/oh-no-113125.mp3'
+import wahSound from '/sounds/wah-wah-sad-trombone-6347.mp3'
 import CodeLevel from './CodeLevel';
 export default function DragAndDropQuiz({
   question,
@@ -107,26 +107,30 @@ export default function DragAndDropQuiz({
       localStorage.setItem('points', newPoints);
       updatePoints(newPoints);
   
-      // if (qNum + 1 >= allQuestionNum) {
-      //   console.log('here');
-      //   setTimeout(() => {
-      //     localStorage.setItem('progress', JSON.stringify(updatedProgress));
-      //   localStorage.setItem('progress', JSON.stringify(updatedProgressLevel));
-      //     navigate(`/dashboard/${lan}_Topics/${topic}/levels/${parseInt(level) + 1}/challenges/${0}`);
-      //     window.location.reload();
+      if (qNum + 1 >= allQuestionNum) {
+        console.log('here');
+        setTimeout(() => {
+          localStorage.setItem('progress', JSON.stringify(updatedProgress));
+        localStorage.setItem('progress', JSON.stringify(updatedProgressLevel));
+          navigate(`/dashboard/${lan}_Topics/${topic}/levels/${parseInt(level) + 1}/challenges/${0}`);
+          window.location.reload();
        
-      //   }, 2500);
-      // } else {
-      //   setTimeout(() => {
-      //     navigate(`/dashboard/${lan}_Topics/${topic}/levels/${level}/challenges/${parseInt(qNum) + 1}`);
-      //     window.location.reload();
-      //   }, 2500);
-      // }
+        }, 2500);
+      } else {
+        setTimeout(() => {
+          navigate(`/dashboard/${lan}_Topics/${topic}/levels/${level}/challenges/${parseInt(qNum) + 1}`);
+          window.location.reload();
+        }, 2500);
+      }
       setResultHtml(userAnswer.map((block) => block.value).join(''));
     } else {
-      
-      console.log('Try Again');
-      playOhNo();
+  
+        console.log('Try Again');
+        console.log(userAnswer.length);
+        console.log(answer.length);
+        playOhNo();
+  
+    
     }
 };
   
@@ -135,7 +139,7 @@ export default function DragAndDropQuiz({
     setIsRun(true);
     console.log('Updated User Answer:', userAnswer);
     const is = userAnswer.filter((ans) => ans.id !== ans.boardId);
-    is.length === 0 ?handleCorrectAnswer(): playWah();
+    is.length === 0 ? handleCorrectAnswer(): playWah();
   };
 
   return (
