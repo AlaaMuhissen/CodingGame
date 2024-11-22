@@ -6,25 +6,27 @@ import "dotenv/config.js";
 
 export const createUser = async (req, res, next) => {
   try {
-    //* gett the data from body
+    //* Get the data from body
     const { username, email, password, role } = req.body;
-    //* if the user correctly filled the fields or no field missing
+
+    //* Validate input fields
     if (!(email && password && role && username)) {
       res.status(402);
-      throw new Error(" Emaill & password & role are required");
+      throw new Error("Email, password, role, and username are required");
     }
-    //* find the user in DB
+
+    //* Check if the user already exists in the database
     const existingUser = await User.findOne({ email });
-    //* check if user exist
     if (existingUser) {
       res.status(402);
-      throw new Error(" User exist in the DB");
+      throw new Error("User already exists in the database");
     }
-    //* hash the password
+
+    //* Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
-    //* create the user
 
+    //* Create the user
     const newUser = await User.create({
       username,
       email,
@@ -32,7 +34,29 @@ export const createUser = async (req, res, next) => {
       role,
     });
 
-    res.status(201).send(newUser);
+    //* Generate a JWT token for the new user
+    const token = jwt.sign(
+      {
+        id: newUser._id,
+        email: newUser.email,
+        role: newUser.role,
+      },
+      process.env.SECRET,
+      {
+        expiresIn: "1h", // Token expiry time
+      }
+    );
+
+    //* Return the new user along with the token
+    res.status(201).json({
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+      },
+      token,
+    });
   } catch (error) {
     next(error);
   }
@@ -82,8 +106,30 @@ export const loginUser = async (req, res, next) => {
   }
 };
 export const userProfile = async (req, res, next) => {
- console.log(req)
+  try {
+    const { user } = req;
+    console.log(`==== ${user}=======`);
+
+    if (!user) {
+      res.status(401).send("Unauthorized");
+      return;
+    }
+
+    // Construct the user profile response
+    const userProfile = {
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      points: user.points,
+      progress: user.progress,
+    };
+
+    res.status(200).json(userProfile);
+  } catch (error) {
+    next(error);
+  }
 };
+
 
 export const userPoints = async (req, res, next) => {
   try {

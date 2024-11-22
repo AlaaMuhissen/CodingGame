@@ -9,7 +9,8 @@ const levelProgressSchema = new mongoose.Schema({
   currentQuestion:{
     type: Number,
     default: 0,
-  }
+  },
+  solvedQuestions: [],
 });
 
 const topicProgressSchema = new mongoose.Schema({
