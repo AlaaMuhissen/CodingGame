@@ -7,6 +7,8 @@ function LoginPage() {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword , setUserPassword] = useState("");
   const [isTeacher , setIsTeacher] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); 
+
   const navigate = useNavigate();
   const syllabus = useSyllabus();
  
@@ -20,6 +22,7 @@ function LoginPage() {
   }
   const handleLogin = (e) => {
     e.preventDefault();
+    setErrorMessage("");
   
     const userData = {
       email: userEmail,
@@ -31,9 +34,16 @@ function LoginPage() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(userData)
+      body: JSON.stringify(userData),
     })
-      .then(response => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw new Error(err.error || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
       .then(data => {
         console.log(data)
         localStorage.setItem('token', data.token);
@@ -47,6 +57,7 @@ function LoginPage() {
               name: `Level ${index + 1}`,
               completed: false,
               currentQuestion: 0,
+              solvedQuestions: [],
             })),
           })),
         }));
@@ -65,7 +76,10 @@ function LoginPage() {
 
       })
       .catch(error => {
-        console.error('Error during login:', error);
+        //console.error('Error during login:', error);
+        setUserEmail("");
+        setUserPassword("");
+        setErrorMessage("Username or password is incorrect!"); 
       });
   };
 
@@ -75,13 +89,21 @@ function LoginPage() {
   
   return (
    <>
-       <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat" style={{ backgroundImage: `url(${loginBackground})` }}>
+       <div className="flex h-screen w-full items-center justify-center bg-gray-900 bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${loginBackground})` }}>
       <div className='rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md max-sm:px-8'>
         <div className="text-white">
           <div className="mb-8 flex flex-col items-center">
             <img src={Avatar} width="150" alt="Avatar" />
-         
           </div>
+
+            {/* Display error message */}
+            {errorMessage && (
+            <div className="text-center mb-6">
+              <span className="inline-block bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-lg animate-bounce shadow-lg">
+                {errorMessage}
+              </span>
+            </div>
+          )}
           <form>
             <div className="mb-4 text-lg">
               <input
@@ -104,7 +126,8 @@ function LoginPage() {
             </div>
 
             <div className="mb-6">
-            <span className="ml-2 text-sm text-[#fff]" onClick={handleClickSignUP}>You still not have an account?</span>
+            <span className="ml-2 text-sm text-[#fff]">You still not have an account? </span>
+            <span className=" text-sm text-blue-400 cursor-pointer hover:underline" onClick={handleClickSignUP}>Sign up here!</span>
               {/* <label className="flex items-center">
                 <input
                   type="checkbox"

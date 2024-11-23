@@ -10,6 +10,7 @@ import LevelsPage from './Pages/LevelsPage'
 import ChallengePage from './Pages/ChallengePage'
 import { PointProvider } from './Component/PointContext'
 import PointProviderLayout from './Component/PointProviderLayout'
+import UserProviderLayout from './Component/UserProviderLayout'
 
 
 function App() {
@@ -31,11 +32,13 @@ function App() {
           <Route path='/' element={<LoginPage />} />
           <Route path='/signUp' element={<RegistrationPage />} />
            <Route element={<PointProviderLayout />}>
+           <Route element={<UserProviderLayout />}>
             <Route path='/dashboard' element={<DashboardPage />} />
             <Route path='/dashboard/:language_Topics' element={<LanguageTopicsPage />} />
             <Route path='/dashboard/:language_Topics/:topic/levels' element={<LevelsPage />} />
             <Route path='/dashboard/:language_Topics/:topic/levels/:levelNum/challenges' element={<ChallengePage />} />
             <Route path='/dashboard/:language_Topics/:topic/levels/:levelNum/challenges/:challengeNum' element={<HTMLPage />} />
+          </Route>
           </Route>
         </Routes>
       </SyllabusProvider>

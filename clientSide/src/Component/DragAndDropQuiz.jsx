@@ -34,107 +34,117 @@ export default function DragAndDropQuiz({
   const [playOhNo] = useSound(ohNoSound);
   const [playWah] = useSound(wahSound);
   const [resultHtml, setResultHtml] = useState('');
+  const progress = JSON.parse(localStorage.getItem('progress'));
 
- const progress = JSON.parse(localStorage.getItem('progress'));
   useEffect(() => {
     const storedPoints = localStorage.getItem('points');
     if (storedPoints !== null) {
       updatePoints(parseInt(storedPoints, 10));
     }
   }, [updatePoints]);
-  const handleCorrectAnswer = () => {
-    const wrongAnswer = userAnswer.filter((ans) => ans.id !== ans.boardId);
-  
-    if (
-      (userAnswer.length === answer.length &&
-        userAnswer.every((obj1) =>
-          answer.some((obj2) => obj1.id === obj2.id)
-        )) ||
-      level === 1
-    ) {
-      console.log('Correct!');
-      setUserAnswer([]);
-      setIsRun(true);
-      setCounter(0);
-      play();
-      toast("User's answer is correct!");
-      const newPoints = points + reward;
-  
-      const updatedProgress = progress.map((progressItem) => {
-        if (progressItem.name === lan) {
-         
-          const updatedTopics = progressItem.topics.map((topicItem, index) => {
+
+const handleCorrectAnswer = () => {
+  const isCorrect =
+    userAnswer.length === answer.length &&
+    userAnswer.every((obj1) =>
+      answer.some((obj2) => obj1.id === obj2.id)
+    );
+
+  if (isCorrect || level === 1) {
+    console.log("Correct!");
+    toast("User's answer is correct!");
+    setUserAnswer([]);
+    setIsRun(true);
+    setCounter(0);
+    play();
+
+    const updatedProgress = progress.map((progressItem) => {
+      if (progressItem.name === lan) {
+        return {
+          ...progressItem,
+          topics: progressItem.topics.map((topicItem) => {
             if (topicItem.name === topic) {
-                const updatedLevels = topicItem.levels.map((level, i) => ({
-                  ...level,
-                  currentQuestion: i === index ? level.currentQuestion + 1 : level.currentQuestion,
-                }));
               return {
                 ...topicItem,
-                levels: updatedLevels,
+                levels: topicItem.levels.map((levelItem, index) => {
+                  if (index === parseInt(level) - 1) {
+                    const maxQuestions = allQuestionNum;
+
+                    // Check if question is already solved
+                    if (levelItem.solvedQuestions?.includes(parseInt(qNum))) {
+                      toast.info("No points awarded: Question already solved.");
+                      return levelItem; // Return unchanged level
+                    }
+
+                    // Add the question to solvedQuestions and update progress
+                    const nextQuestion = levelItem.currentQuestion + 1;
+                    return {
+                      ...levelItem,
+                      completed: nextQuestion >= maxQuestions,
+                      currentQuestion: Math.min(nextQuestion, maxQuestions),
+                      solvedQuestions: [
+                        ...(levelItem.solvedQuestions || []), // Preserve existing solved questions
+                        parseInt(qNum), // Add current question to solvedQuestions
+                      ],
+                    };
+                  }
+                  return levelItem;
+                }),
               };
             }
             return topicItem;
-          });
-      
-          return {
-            ...progressItem,
-            topics: updatedTopics,
-          };
-        }
-      
-        return progressItem;
-      });
-      
-      const updatedProgressLevel = progress.map((progressItem) => {
-        if (progressItem.name === lan) {
-          progressItem.topics.forEach((topicData, index) => {
-            if (topicData.name === topic) {
-              console.log(topicData);
-              console.log(index);
-              topicData.levels[parseInt(level) - 1].completed = true;
-            }
-          });
-        }
-      
-        return progressItem;
-      });
-      
-   
-      localStorage.setItem('progress', JSON.stringify(updatedProgress));
-      
-      
-      localStorage.setItem('points', newPoints);
-      updatePoints(newPoints);
-  
-      if (qNum + 1 >= allQuestionNum) {
-        console.log('here');
-        setTimeout(() => {
-          localStorage.setItem('progress', JSON.stringify(updatedProgress));
-        localStorage.setItem('progress', JSON.stringify(updatedProgressLevel));
-          navigate(`/dashboard/${lan}_Topics/${topic}/levels/${parseInt(level) + 1}/challenges/${0}`);
-          window.location.reload();
-       
-        }, 2500);
-      } else {
-        setTimeout(() => {
-          navigate(`/dashboard/${lan}_Topics/${topic}/levels/${level}/challenges/${parseInt(qNum) + 1}`);
-          window.location.reload();
-        }, 2500);
+          }),
+        };
       }
-      setResultHtml(userAnswer.map((block) => block.value).join(''));
-    } else {
-  
-        console.log('Try Again');
-        console.log(userAnswer.length);
-        console.log(answer.length);
-        playOhNo();
-  
-    
-    }
-};
-  
+      return progressItem;
+    });
 
+    // Save progress locally
+    localStorage.setItem("progress", JSON.stringify(updatedProgress));
+
+    // Update points only if the question is new
+    if (!progress.some((item) =>
+      item.topics.some((topic) =>
+        topic.levels.some((level) =>
+          level.solvedQuestions?.includes(parseInt(qNum))
+        )
+      )
+    )) {
+      const newPoints = points + reward;
+      updatePoints(newPoints);
+      localStorage.setItem("points", newPoints);
+    }
+
+    // Send updated progress to the server
+    fetch("https://codingname.onrender.com/api/user/progress", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ progress: updatedProgress }),
+    }).catch((err) => console.error("Error updating progress:", err));
+
+    // Navigate to the next challenge or level
+    if (parseInt(qNum) + 1 >= allQuestionNum) {
+      setTimeout(() => {
+        navigate(`/dashboard/${lan}_Topics/${topic}/levels/${parseInt(level) + 1}/challenges/0`);
+        window.location.reload();
+      }, 2500);
+    } else {
+      setTimeout(() => {
+        navigate(`/dashboard/${lan}_Topics/${topic}/levels/${level}/challenges/${parseInt(qNum) + 1}`);
+        window.location.reload();
+      }, 2500);
+    }
+
+    setResultHtml(userAnswer.map((block) => block.value).join(""));
+  } else {
+    console.log("Try Again");
+    playOhNo();
+    toast.error("Try again!");
+  }
+};
   const handleRunButton = () => {
     setIsRun(true);
     console.log('Updated User Answer:', userAnswer);
